@@ -329,10 +329,10 @@ type
     var CustomForm: TCustomForm; var Msg: TStrings) of object;
   TCustomUserLoggedForm = procedure(Sender: TObject;
     var CustomForm: TCustomForm) of object; // Cesar: 13/07/2005
-  TOnAddUser = procedure(Sender: TObject; var Login, Password, Nome,
+  TOnAddUser = procedure(Sender: TObject; var Login, Password, Name,
     Mail: String; var Profile: Integer; var Privuser: Boolean) of object;
   TOnChangeUser = procedure(Sender: TObject; IdUser: Integer;
-    var Login, Nome, Mail: String; var Profile: Integer; var Privuser: Boolean)
+    var Login, Name, Mail: String; var Profile: Integer; var Privuser: Boolean)
     of object;
   TOnDeleteUser = procedure(Sender: TObject; IdUser: Integer;
     var CanDelete: Boolean; var ErrorMsg: String) of object;
@@ -474,7 +474,7 @@ type
     procedure Execute;
     procedure StartLogin;
     procedure ShowChangePassword;
-    procedure ChangeUser(IdUser: Integer; Login, Nome, Mail: String;
+    procedure ChangeUser(IdUser: Integer; Login, Name, Mail: String;
       Profile, UserExpired, UserDaysSun, Status: Integer; Privuser: Boolean);
     procedure ChangePassword(IdUser: Integer; NewPassword: String);
     procedure AddRight(IdUser: Integer; ItemRight: TObject;
@@ -487,7 +487,7 @@ type
       SoVerificarUsuarioAdmin: Boolean = False): Integer; // Boolean;
     function GetLocalUserName: String;
     function GetLocalComputerName: String;
-    function AddUser(Login, Password, Nome, Mail: String;
+    function AddUser(Login, Password, Name, Mail: String;
       Profile, UserExpired, DaysExpired: Integer; Privuser: Boolean): Integer;
     function ExisteUsuario(Login: String): Boolean;
     property CurrentUser: TUCCurrentUser read FCurrentUser write FCurrentUser;
@@ -1579,7 +1579,7 @@ begin
   ApplyRights;
 end;
 
-function TUserControl.AddUser(Login, Password, Nome, Mail: String;
+function TUserControl.AddUser(Login, Password, Name, Mail: String;
   Profile, UserExpired, DaysExpired: Integer; Privuser: Boolean): Integer;
 var
   Key: String;
@@ -1641,7 +1641,7 @@ begin
   end;
 
   if Assigned(OnAddUser) then
-    OnAddUser(Self, Login, Password, Nome, Mail, Profile, Privuser);
+    OnAddUser(Self, Login, Password, Name, Mail, Profile, Privuser);
 end;
 
 procedure TUserControl.ChangePassword(IdUser: Integer; NewPassword: String);
@@ -1713,7 +1713,7 @@ begin
     OnChangePassword(Self, IdUser, Login, Senha, NewPassword);
 end;
 
-procedure TUserControl.ChangeUser(IdUser: Integer; Login, Nome, Mail: String;
+procedure TUserControl.ChangeUser(IdUser: Integer; Login, Name, Mail: String;
   Profile, UserExpired, UserDaysSun, Status: Integer; Privuser: Boolean);
 var
   Key: String;
@@ -1754,7 +1754,7 @@ begin
         FieldUserInative + ' = ' + IntToStr(Status) + ' where ' + FieldUserID +
         ' = ' + IntToStr(IdUser));
   if Assigned(OnChangeUser) then
-    OnChangeUser(Self, IdUser, Login, Nome, Mail, Profile, Privuser);
+    OnChangeUser(Self, IdUser, Login, Name, Mail, Profile, Privuser);
 end;
 
 procedure TUserControl.CriaTabelaMsgs(const TableName: String);
