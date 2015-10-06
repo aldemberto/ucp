@@ -329,10 +329,10 @@ type
     var CustomForm: TCustomForm; var Msg: TStrings) of object;
   TCustomUserLoggedForm = procedure(Sender: TObject;
     var CustomForm: TCustomForm) of object; // Cesar: 13/07/2005
-  TOnAddUser = procedure(Sender: TObject; var Login, Password, Name,
+  TOnAddUser = procedure(Sender: TObject; var Login, Password, Nome,
     Mail: String; var Profile: Integer; var Privuser: Boolean) of object;
   TOnChangeUser = procedure(Sender: TObject; IdUser: Integer;
-    var Login, Name, Mail: String; var Profile: Integer; var Privuser: Boolean)
+    var Login, Nome, Mail: String; var Profile: Integer; var Privuser: Boolean)
     of object;
   TOnDeleteUser = procedure(Sender: TObject; IdUser: Integer;
     var CanDelete: Boolean; var ErrorMsg: String) of object;
@@ -428,14 +428,14 @@ type
     procedure ActionEsqueceuSenha(Sender: TObject);
   protected
     FRetry: Integer;
-    // Formul·rios
+    // Formul√°rios
     FFormTrocarSenha: TCustomForm;
     FFormLogin: TCustomForm;
     FFormGeral: TCustomForm;
     // -----
 
     procedure Loaded; override;
-    // Criar Formul·rios
+    // Criar Formul√°rios
     procedure CriaFormTrocarSenha; dynamic;
     // -----
 
@@ -474,7 +474,7 @@ type
     procedure Execute;
     procedure StartLogin;
     procedure ShowChangePassword;
-    procedure ChangeUser(IdUser: Integer; Login, Name, Mail: String;
+    procedure ChangeUser(IdUser: Integer; Login, Nome, Mail: String;
       Profile, UserExpired, UserDaysSun, Status: Integer; Privuser: Boolean);
     procedure ChangePassword(IdUser: Integer; NewPassword: String);
     procedure AddRight(IdUser: Integer; ItemRight: TObject;
@@ -487,7 +487,7 @@ type
       SoVerificarUsuarioAdmin: Boolean = False): Integer; // Boolean;
     function GetLocalUserName: String;
     function GetLocalComputerName: String;
-    function AddUser(Login, Password, Name, Mail: String;
+    function AddUser(Login, Password, Nome, Mail: String;
       Profile, UserExpired, DaysExpired: Integer; Privuser: Boolean): Integer;
     function ExisteUsuario(Login: String): Boolean;
     property CurrentUser: TUCCurrentUser read FCurrentUser write FCurrentUser;
@@ -873,7 +873,7 @@ begin
   begin
     If UpperCase(Owner.ClassParent.ClassName) = UpperCase('TDataModule') then
       raise Exception.Create
-        ('O Componente "TUserControl" n„o pode ser definido em um "TDataModulo"');
+        ('O Componente "TUserControl" n√£o pode ser definido em um "TDataModulo"');
 
     if not Assigned(DataConnector) then
       raise Exception.Create(RetornaLingua(fLanguage, 'MsgExceptConnector'));
@@ -894,7 +894,7 @@ begin
       if Owner.Components[Contador] is TUCSettings then
       begin
         Language := TUCSettings(Owner.Components[Contador]).Language;
-        // torna a linguage do UCSETTINGS como padr„o
+        // torna a linguage do UCSETTINGS como padr√£o
         FUserSettings.BancoDados := TUCSettings(Owner.Components[Contador])
           .BancoDados;
         ApplySettings(TUCSettings(Owner.Components[Contador]));
@@ -1168,11 +1168,11 @@ procedure TUserControl.ActionTSBtGrava(Sender: TObject);
 var
   AuxPass: String;
 begin
-  { Pelo que eu analizei, a gravaÁ„o da senha no Banco de Dados e feita criptografada
-    Qdo a criptografia e padr„o, a funcao RegistraCurrentUser descriptografa a senha atual
+  { Pelo que eu analizei, a grava√ß√£o da senha no Banco de Dados e feita criptografada
+    Qdo a criptografia e padr√£o, a funcao RegistraCurrentUser descriptografa a senha atual
     agora quando criptografia e MD5SUM, devemos criptografar a senha atual vinda do formulario de
     troca de senha para podemos comparar com a senha atual da classe TUCCurrentUser
-    ModificaÁ„o Feita por Vicente Barros Leonel
+    Modifica√ß√£o Feita por Vicente Barros Leonel
   }
   case Self.Criptografia of
     cPadrao:
@@ -1378,7 +1378,7 @@ end;
 
 procedure TUserControl.Log(Msg: String; Level: Integer);
 begin
-  // Adicionado ao log a identificaÁ„o da AplicaÁ„o
+  // Adicionado ao log a identifica√ß√£o da Aplica√ß√£o
   if not LogControl.Active then
     Exit;
 
@@ -1470,7 +1470,7 @@ begin
     TTrocaSenha(FFormTrocarSenha).ForcarTroca := True;
     FFormTrocarSenha.ShowModal;
     FreeAndNil(FFormTrocarSenha);
-    { Incrementa a Data de ExpiraÁ„o em x dias apÛs a troca de senha }
+    { Incrementa a Data de Expira√ß√£o em x dias ap√≥s a troca de senha }
     CurrentUser.DateExpiration := CurrentUser.DateExpiration +
       CurrentUser.UserDaysExpired;
   end;
@@ -1579,7 +1579,7 @@ begin
   ApplyRights;
 end;
 
-function TUserControl.AddUser(Login, Password, Name, Mail: String;
+function TUserControl.AddUser(Login, Password, Nome, Mail: String;
   Profile, UserExpired, DaysExpired: Integer; Privuser: Boolean): Integer;
 var
   Key: String;
@@ -1641,7 +1641,7 @@ begin
   end;
 
   if Assigned(OnAddUser) then
-    OnAddUser(Self, Login, Password, Name, Mail, Profile, Privuser);
+    OnAddUser(Self, Login, Password, Nome, Mail, Profile, Privuser);
 end;
 
 procedure TUserControl.ChangePassword(IdUser: Integer; NewPassword: String);
@@ -1713,7 +1713,7 @@ begin
     OnChangePassword(Self, IdUser, Login, Senha, NewPassword);
 end;
 
-procedure TUserControl.ChangeUser(IdUser: Integer; Login, Name, Mail: String;
+procedure TUserControl.ChangeUser(IdUser: Integer; Login, Nome, Mail: String;
   Profile, UserExpired, UserDaysSun, Status: Integer; Privuser: Boolean);
 var
   Key: String;
@@ -1754,7 +1754,7 @@ begin
         FieldUserInative + ' = ' + IntToStr(Status) + ' where ' + FieldUserID +
         ' = ' + IntToStr(IdUser));
   if Assigned(OnChangeUser) then
-    OnChangeUser(Self, IdUser, Login, Name, Mail, Profile, Privuser);
+    OnChangeUser(Self, IdUser, Login, Nome, Mail, Profile, Privuser);
 end;
 
 procedure TUserControl.CriaTabelaMsgs(const TableName: String);
@@ -1865,7 +1865,7 @@ var
   Sql: String;
   DataSet: TDataSet;
 begin
-  { Procura o campo FieldUserDaysSun na tabela de usuarios se o mesmo n„o existir cria }
+  { Procura o campo FieldUserDaysSun na tabela de usuarios se o mesmo n√£o existir cria }
   try
     Sql := Format('select * from %s', [FTableUsers.TableName]);
     DataSet := DataConnector.UCGetSQLDataset(Sql);
@@ -2366,7 +2366,7 @@ begin
         OnApplyRightsActionIt(Self,
           TAction(TActionList(ObjetoAction).Actions[Contador]));
     end;
-  end; // Fim das permissıes de Actions
+  end; // Fim das permiss√µes de Actions
 
   {$IFNDEF FPC}
   { .$IFDEF UCACTMANAGER }
@@ -3048,7 +3048,7 @@ begin
     Type_VarChar   := SourceSettings.Type_VarChar;
     Type_Char      := SourceSettings.Type_Char;
     Type_Int       := SourceSettings.Type_Int;
-    end;  atenÁ„o mudar aqui }
+    end;  aten√ß√£o mudar aqui }
 
   UserSettings.WindowsPosition := SourceSettings.WindowsPosition;
 end;
